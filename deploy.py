@@ -358,4 +358,19 @@ def deploy():
 
 
 if __name__ == "__main__":
-    deploy()
+    import sys
+    if "--generate-only" in sys.argv:
+        # GitHub Actions用: HTML生成のみ (push はActionsが行う)
+        print("=" * 50)
+        print("  Lead-Lag Signal - HTML生成 (generate-only)")
+        print("=" * 50)
+        signal_data = compute_signals()
+        print(f"\nシグナル計算完了 (基準日: {signal_data['us_date']})")
+        html_path = os.path.join(SCRIPT_DIR, "index.html")
+        html = generate_html(signal_data)
+        with open(html_path, "w", encoding="utf-8") as f:
+            f.write(html)
+        print("index.html 生成完了")
+    else:
+        # ローカル用: HTML生成 + git push
+        deploy()
