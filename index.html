@@ -37,6 +37,14 @@ body { font-family: -apple-system, 'Segoe UI', 'Hiragino Sans', sans-serif;
                       border-radius: 4px; margin-top: 2px; display: inline-block; }
 .badge.buy { background: rgba(0,214,143,0.15); color: #00d68f; }
 .badge.sell { background: rgba(255,77,106,0.15); color: #ff4d6a; }
+.bar-wrap { width: 100%; height: 6px; background: #1e2548; border-radius: 3px;
+            margin-top: 6px; position: relative; }
+.bar-fill { height: 100%; border-radius: 3px; position: absolute; }
+.bar-fill.pos { background: #00d68f; right: 50%; }
+.bar-fill.neg { background: #ff4d6a; left: 50%; }
+.bar-center { position: absolute; left: 50%; top: 0; width: 1px;
+              height: 100%; background: #5a6380; }
+.signal-label { font-size: 10px; margin-top: 2px; color: #8892b0; }
 .us-card { background: #131832; border-radius: 10px; margin: 4px 0;
            padding: 10px 14px; display: flex; align-items: center;
            justify-content: space-between; }
@@ -65,21 +73,42 @@ body { font-family: -apple-system, 'Segoe UI', 'Hiragino Sans', sans-serif;
 </div>
 
 <script>
-const d = {"us_date": "2026-04-10", "updated_at": "2026-04-13 00:30", "jp_signals": [{"rank": 1, "ticker": "1618.T", "name": "エネルギー資源", "signal": 0.1278, "action": "BUY"}, {"rank": 2, "ticker": "1629.T", "name": "商社・卸売", "signal": 0.1177, "action": "BUY"}, {"rank": 3, "ticker": "1631.T", "name": "銀行", "signal": 0.11, "action": "BUY"}, {"rank": 4, "ticker": "1625.T", "name": "電機・精密", "signal": 0.1089, "action": "BUY"}, {"rank": 5, "ticker": "1624.T", "name": "機械", "signal": 0.0088, "action": "BUY"}, {"rank": 6, "ticker": "1623.T", "name": "鉄鋼・非鉄", "signal": 0.0054, "action": ""}, {"rank": 7, "ticker": "1626.T", "name": "情報通信・サービス", "signal": 0.0022, "action": ""}, {"rank": 8, "ticker": "1622.T", "name": "自動車・輸送機", "signal": 0.0009, "action": ""}, {"rank": 9, "ticker": "1620.T", "name": "素材・化学", "signal": -0.0015, "action": ""}, {"rank": 10, "ticker": "1632.T", "name": "金融(除く銀行)", "signal": -0.0015, "action": ""}, {"rank": 11, "ticker": "1628.T", "name": "運輸・物流", "signal": -0.0025, "action": ""}, {"rank": 12, "ticker": "1619.T", "name": "建設・資材", "signal": -0.0026, "action": ""}, {"rank": 13, "ticker": "1633.T", "name": "不動産", "signal": -0.0059, "action": "SELL"}, {"rank": 14, "ticker": "1627.T", "name": "電力・ガス", "signal": -0.1035, "action": "SELL"}, {"rank": 15, "ticker": "1621.T", "name": "医薬品", "signal": -0.1166, "action": "SELL"}, {"rank": 16, "ticker": "1617.T", "name": "食品", "signal": -0.1202, "action": "SELL"}, {"rank": 17, "ticker": "1630.T", "name": "小売", "signal": -0.1252, "action": "SELL"}], "us_returns": [{"ticker": "XLB", "name": "素材", "return_pct": 0.56}, {"ticker": "XLK", "name": "テクノロジー", "return_pct": 0.39}, {"ticker": "XLRE", "name": "不動産", "return_pct": 0.21}, {"ticker": "XLY", "name": "一般消費財", "return_pct": 0.13}, {"ticker": "XLC", "name": "通信", "return_pct": -0.28}, {"ticker": "XLI", "name": "資本財", "return_pct": -0.39}, {"ticker": "XLU", "name": "公益", "return_pct": -0.4}, {"ticker": "XLE", "name": "エネルギー", "return_pct": -0.68}, {"ticker": "XLF", "name": "金融", "return_pct": -1.09}, {"ticker": "XLP", "name": "生活必需品", "return_pct": -1.29}, {"ticker": "XLV", "name": "ヘルスケア", "return_pct": -1.35}], "n_long": 5, "n_short": 5};
+const d = {"us_date": "2026-04-13", "updated_at": "2026-04-14 00:47", "jp_signals": [{"rank": 1, "ticker": "1618.T", "name": "エネルギー資源", "signal": 0.1812, "action": "BUY"}, {"rank": 2, "ticker": "1629.T", "name": "商社・卸売", "signal": 0.1694, "action": "BUY"}, {"rank": 3, "ticker": "1631.T", "name": "銀行", "signal": 0.1586, "action": "BUY"}, {"rank": 4, "ticker": "1625.T", "name": "電機・精密", "signal": 0.1585, "action": "BUY"}, {"rank": 5, "ticker": "1624.T", "name": "機械", "signal": 0.0098, "action": "BUY"}, {"rank": 6, "ticker": "1623.T", "name": "鉄鋼・非鉄", "signal": 0.0067, "action": ""}, {"rank": 7, "ticker": "1622.T", "name": "自動車・輸送機", "signal": 0.0018, "action": ""}, {"rank": 8, "ticker": "1626.T", "name": "情報通信・サービス", "signal": -0.0011, "action": ""}, {"rank": 9, "ticker": "1620.T", "name": "素材・化学", "signal": -0.0046, "action": ""}, {"rank": 10, "ticker": "1619.T", "name": "建設・資材", "signal": -0.0053, "action": ""}, {"rank": 11, "ticker": "1632.T", "name": "金融(除く銀行)", "signal": -0.0057, "action": ""}, {"rank": 12, "ticker": "1628.T", "name": "運輸・物流", "signal": -0.01, "action": ""}, {"rank": 13, "ticker": "1633.T", "name": "不動産", "signal": -0.0107, "action": "SELL"}, {"rank": 14, "ticker": "1627.T", "name": "電力・ガス", "signal": -0.1585, "action": "SELL"}, {"rank": 15, "ticker": "1621.T", "name": "医薬品", "signal": -0.1775, "action": "SELL"}, {"rank": 16, "ticker": "1617.T", "name": "食品", "signal": -0.1814, "action": "SELL"}, {"rank": 17, "ticker": "1630.T", "name": "小売", "signal": -0.1862, "action": "SELL"}], "us_returns": [{"ticker": "XLK", "name": "テクノロジー", "return_pct": 0.93}, {"ticker": "XLE", "name": "エネルギー", "return_pct": 0.6}, {"ticker": "XLC", "name": "通信", "return_pct": 0.22}, {"ticker": "XLF", "name": "金融", "return_pct": 0.2}, {"ticker": "XLY", "name": "一般消費財", "return_pct": -0.14}, {"ticker": "XLI", "name": "資本財", "return_pct": -0.42}, {"ticker": "XLB", "name": "素材", "return_pct": -0.42}, {"ticker": "XLRE", "name": "不動産", "return_pct": -0.58}, {"ticker": "XLV", "name": "ヘルスケア", "return_pct": -0.67}, {"ticker": "XLU", "name": "公益", "return_pct": -1.5}, {"ticker": "XLP", "name": "生活必需品", "return_pct": -1.52}], "n_long": 5, "n_short": 5};
 
 const buyItems = d.jp_signals.filter(s => s.action === 'BUY');
 const sellItems = d.jp_signals.filter(s => s.action === 'SELL');
+
+const maxSig = Math.max(...d.jp_signals.map(s => Math.abs(s.signal)), 0.01);
+
+function signalLabel(v) {
+  const a = Math.abs(v);
+  if (a >= maxSig * 0.7) return v >= 0 ? '強い買い' : '強い売り';
+  if (a >= maxSig * 0.3) return v >= 0 ? '買い' : '売り';
+  return '中立';
+}
 
 function signalCard(s) {
   const cls = s.action === 'BUY' ? 'buy' : (s.action === 'SELL' ? 'sell' : '');
   const valCls = s.signal >= 0 ? 'pos' : 'neg';
   const badge = s.action ? '<div class="badge ' + cls + '">' + (s.action === 'BUY' ? '買い' : '売り') + '</div>' : '';
+  const barPct = Math.min(Math.abs(s.signal) / maxSig * 50, 50);
+  const barDir = s.signal >= 0 ? 'pos' : 'neg';
+  const barStyle = s.signal >= 0
+    ? 'width:' + barPct + '%;right:50%'
+    : 'width:' + barPct + '%;left:50%';
+  const label = signalLabel(s.signal);
   return '<div class="signal-card ' + cls + '">' +
     '<div class="left"><div class="rank">' + s.rank + '</div>' +
     '<div class="info"><div class="name">' + s.name + '</div>' +
     '<div class="ticker">' + s.ticker + '</div></div></div>' +
-    '<div class="right"><div class="signal-val ' + valCls + '">' +
-    (s.signal >= 0 ? '+' : '') + s.signal.toFixed(4) + '</div>' + badge + '</div></div>';
+    '<div class="right" style="min-width:160px">' +
+    '<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">' +
+    '<div class="signal-label">' + label + '</div>' +
+    '<div class="signal-val ' + valCls + '">' +
+    (s.signal >= 0 ? '+' : '') + s.signal.toFixed(4) + '</div>' + badge + '</div>' +
+    '<div class="bar-wrap"><div class="bar-center"></div>' +
+    '<div class="bar-fill ' + barDir + '" style="' + barStyle + '"></div></div>' +
+    '</div></div>';
 }
 
 function showTab(name) {

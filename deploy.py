@@ -228,6 +228,14 @@ body {{ font-family: -apple-system, 'Segoe UI', 'Hiragino Sans', sans-serif;
                       border-radius: 4px; margin-top: 2px; display: inline-block; }}
 .badge.buy {{ background: rgba(0,214,143,0.15); color: #00d68f; }}
 .badge.sell {{ background: rgba(255,77,106,0.15); color: #ff4d6a; }}
+.bar-wrap {{ width: 100%; height: 6px; background: #1e2548; border-radius: 3px;
+            margin-top: 6px; position: relative; }}
+.bar-fill {{ height: 100%; border-radius: 3px; position: absolute; }}
+.bar-fill.pos {{ background: #00d68f; right: 50%; }}
+.bar-fill.neg {{ background: #ff4d6a; left: 50%; }}
+.bar-center {{ position: absolute; left: 50%; top: 0; width: 1px;
+              height: 100%; background: #5a6380; }}
+.signal-label {{ font-size: 10px; margin-top: 2px; color: #8892b0; }}
 .us-card {{ background: #131832; border-radius: 10px; margin: 4px 0;
            padding: 10px 14px; display: flex; align-items: center;
            justify-content: space-between; }}
@@ -261,16 +269,37 @@ const d = {data_json};
 const buyItems = d.jp_signals.filter(s => s.action === 'BUY');
 const sellItems = d.jp_signals.filter(s => s.action === 'SELL');
 
+const maxSig = Math.max(...d.jp_signals.map(s => Math.abs(s.signal)), 0.01);
+
+function signalLabel(v) {{
+  const a = Math.abs(v);
+  if (a >= maxSig * 0.7) return v >= 0 ? '強い買い' : '強い売り';
+  if (a >= maxSig * 0.3) return v >= 0 ? '買い' : '売り';
+  return '中立';
+}}
+
 function signalCard(s) {{
   const cls = s.action === 'BUY' ? 'buy' : (s.action === 'SELL' ? 'sell' : '');
   const valCls = s.signal >= 0 ? 'pos' : 'neg';
   const badge = s.action ? '<div class="badge ' + cls + '">' + (s.action === 'BUY' ? '買い' : '売り') + '</div>' : '';
+  const barPct = Math.min(Math.abs(s.signal) / maxSig * 50, 50);
+  const barDir = s.signal >= 0 ? 'pos' : 'neg';
+  const barStyle = s.signal >= 0
+    ? 'width:' + barPct + '%;right:50%'
+    : 'width:' + barPct + '%;left:50%';
+  const label = signalLabel(s.signal);
   return '<div class="signal-card ' + cls + '">' +
     '<div class="left"><div class="rank">' + s.rank + '</div>' +
     '<div class="info"><div class="name">' + s.name + '</div>' +
     '<div class="ticker">' + s.ticker + '</div></div></div>' +
-    '<div class="right"><div class="signal-val ' + valCls + '">' +
-    (s.signal >= 0 ? '+' : '') + s.signal.toFixed(4) + '</div>' + badge + '</div></div>';
+    '<div class="right" style="min-width:160px">' +
+    '<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px">' +
+    '<div class="signal-label">' + label + '</div>' +
+    '<div class="signal-val ' + valCls + '">' +
+    (s.signal >= 0 ? '+' : '') + s.signal.toFixed(4) + '</div>' + badge + '</div>' +
+    '<div class="bar-wrap"><div class="bar-center"></div>' +
+    '<div class="bar-fill ' + barDir + '" style="' + barStyle + '"></div></div>' +
+    '</div></div>';
 }}
 
 function showTab(name) {{
